@@ -36,7 +36,7 @@ public class UserMealsUtil {
         mealList.forEach(p -> map.merge(p.getDateTime().toLocalDate(), p.getCalories(), Integer::sum));
 
         List<UserMealWithExceed> listResult = mealList.stream().filter((u)->TimeUtil.isBetween(u.getDateTime().toLocalTime(),startTime,endTime))
-                .map((r)->new UserMealWithExceed(r,map.get(r.getDateTime().toLocalDate())>caloriesPerDay))
+                .map((r)->new UserMealWithExceed(r.getDateTime(),r.getDescription(),r.getCalories(),map.get(r.getDateTime().toLocalDate())>caloriesPerDay))
                 .collect(Collectors.toList());
 
         return listResult;
