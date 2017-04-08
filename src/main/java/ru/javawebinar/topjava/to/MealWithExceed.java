@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.to;
 
+import ru.javawebinar.topjava.AuthorizedUser;
+
 import java.time.LocalDateTime;
 
 /**
@@ -22,16 +24,13 @@ public class MealWithExceed {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
     public MealWithExceed(Integer id, LocalDateTime dateTime, String description, int calories, boolean exceed) {
         this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
         this.exceed = exceed;
+        this.userId= AuthorizedUser.id();
     }
 
     public Integer getId() {
