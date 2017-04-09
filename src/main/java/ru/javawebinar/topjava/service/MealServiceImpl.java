@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -16,21 +15,21 @@ public class MealServiceImpl implements MealService {
     private MealRepository repository;
 
     @Override
-    public Meal save(Meal meal) {
-        return repository.save(meal);
+    public Meal save(Meal meal, int userId) {
+        return repository.save(meal,userId);
     }
 
     @Override
-    public void delete(int id) throws NotFoundException {
-        if (repository.get(id).getUserId()== AuthorizedUser.id()) {
+    public void delete(int id,int userId) throws NotFoundException {
+        if (repository.get(id).getUserId()== userId) {
             repository.delete(id);
         }
         else throw new NotFoundException("Not owner for meal");
     }
 
     @Override
-    public Meal get(int id) throws NotFoundException {
-        if (repository.get(id).getUserId()== AuthorizedUser.id()) {
+    public Meal get(int id, int userId) throws NotFoundException {
+        if (repository.get(id).getUserId()== userId) {
             return repository.get(id);
         }
         else throw new NotFoundException("Not owner for meal");
@@ -38,13 +37,13 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Collection<Meal> getAll() {
-        return repository.getAll();
+    public Collection<Meal> getAll(int userId) {
+        return repository.getAll(userId);
     }
 
     @Override
-    public void update(Meal meal) {
-        repository.save(meal);
+    public void update(Meal meal,int userId) {
+        repository.save(meal,userId );
 
     }
 
