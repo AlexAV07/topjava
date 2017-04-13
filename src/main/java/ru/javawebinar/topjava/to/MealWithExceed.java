@@ -24,13 +24,17 @@ public class MealWithExceed {
         return userId;
     }
 
-    public MealWithExceed(Integer id, LocalDateTime dateTime, String description, int calories, boolean exceed) {
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public MealWithExceed(Integer id, LocalDateTime dateTime, String description, int calories, boolean exceed,int userId) {
         this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
         this.exceed = exceed;
-        this.userId= AuthorizedUser.id();
+        this.userId= userId;
     }
 
     public Integer getId() {
