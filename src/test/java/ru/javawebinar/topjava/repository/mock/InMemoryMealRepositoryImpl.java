@@ -57,12 +57,12 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @PostConstruct
     public void postConstruct() {
-        LOG.info("+++ PostConstruct");
+        LOG.info("+++ PostConstruct from Meal");
     }
 
     @PreDestroy
     public void preDestroy() {
-        LOG.info("+++ PreDestroy");
+        LOG.info("+++ PreDestroy from Meal");
     }
 
     @Override
