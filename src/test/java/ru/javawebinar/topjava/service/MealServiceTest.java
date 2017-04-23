@@ -6,6 +6,8 @@ import org.junit.rules.ExpectedException;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,6 +15,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -31,6 +34,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
+    private static final Logger LOG = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
 
     static {
         SLF4JBridgeHandler.install();
@@ -47,12 +51,15 @@ public class MealServiceTest {
         LocalDateTime localDateTime=null;
         @Override
         protected void starting(Description description) {
-            System.out.println("Started "+localDateTime.getChronology()+" class "+description.getClassName());
+            //super.starting(description);
+            LOG.info("Started {} class {} ",localDateTime.getChronology(),description.getDisplayName());
+
         }
 
         @Override
         protected void finished(Description description) {
-            super.finished(description);
+            LOG.info("Finished {} class {} ",localDateTime.getChronology(),description.getDisplayName());
+            //super.finished(description);
         }
     };
 
