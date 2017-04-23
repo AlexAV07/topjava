@@ -1,7 +1,8 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,14 +11,33 @@ import java.time.LocalTime;
  * GKislin
  * 11.01.2015.
  */
+@NamedQueries({
+        @NamedQuery(name = Meal.DELETE, query = "delete FROM Meal m WHERE m.id=:id and m.user.id=:user_id"),
+        @NamedQuery(name = Meal.GET_BETWEEN, query = "select m FROM Meal m where m.user.id=?1 and m.dateTime>=:start and m.dateTime<=:end"),
+        @NamedQuery(name = Meal.GET_ALL, query = "select m FROM Meal m where m.user.id=?1"),
+        @NamedQuery(name = Meal.GET, query = "select m from Meal m where m.id=:id and m.user.id=:user_id")
+})
+@Entity
+@Table(name = "meals")
 public class Meal extends BaseEntity {
+
+    public static final String DELETE ="Delete";
+    public static final String GET_BETWEEN="GetBetween";
+    public static final String GET_ALL="GetAll";
+    public static final String GET="Get";
+
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
+    @Column(name = "description", nullable = false)
+    @NotEmpty
     private String description;
 
+    @Column(name = "calories")
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {
