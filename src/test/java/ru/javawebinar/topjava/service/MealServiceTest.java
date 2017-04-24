@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.service;
 
+import org.jcp.xml.dsig.internal.SignerOutputStream;
+import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -31,10 +33,12 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
+    private static StringBuilder AllLog = new StringBuilder("Print log:\n");
 
     static {
         SLF4JBridgeHandler.install();
@@ -43,22 +47,34 @@ public class MealServiceTest {
     @Autowired
     private MealService service;
 
+    @AfterClass
+    public static void OutAllLog()
+    {
+        System.out.println(AllLog);
+    }
+
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
     @Rule
     public TestWatcher watcher = new TestWatcher() {
-        LocalDateTime localDateTime=null;
+        LocalDateTime startTime;
+        LocalDateTime endTime;
         @Override
         protected void starting(Description description) {
             //super.starting(description);
-            LOG.info("Started {} class {} ",localDateTime.getChronology(),description.getDisplayName());
+            startTime=LocalDateTime.now();
+            LOG.info("Started {} class {} ",LocalDateTime.now(),description.getClassName());
+            AllLog.append("Started "+LocalDateTime.now()+" class "+description.getDisplayName()+"\n");
 
         }
 
         @Override
         protected void finished(Description description) {
-            LOG.info("Finished {} class {} ",localDateTime.getChronology(),description.getDisplayName());
+            LOG.info("Finished {} class {} ",LocalDateTime.now(),description.getClassName());
+            endTime=LocalDateTime.now();
+            AllLog.append("Finished "+LocalDateTime.now()+" class "+description.getDisplayName()+"\n");
+            AllLog.append("Duration = ").append(endTime.minusSeconds(startTime.getSecond()).getSecond()).append("\n");
             //super.finished(description);
         }
     };
